@@ -1,27 +1,53 @@
-//package com.sil.springsecurityapp.config;
-//
-//import jakarta.servlet.Filter;
-//import jakarta.servlet.FilterChain;
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.boot.security.autoconfigure.SecurityProperties;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.core.annotation.Order;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.MediaType;
-//import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.web.filter.OncePerRequestFilter;
-//
-//import java.io.IOException;
-//import java.util.List;
-//import java.util.Map;
-//import java.util.concurrent.ConcurrentHashMap;
-//
-//@Configuration
-//public class SecurityConfig {
+package com.sil.springsecurityapp.config;
+
+import com.sil.springsecurityapp.customSecutityConfig.LoginPageFilter;
+import com.sil.springsecurityapp.customSecutityConfig.SecAuthorizationFilter;
+import com.sil.springsecurityapp.customSecutityConfig.SecContextHolderFilter;
+import com.sil.springsecurityapp.customSecutityConfig.UserNamePasswordFilter;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.security.autoconfigure.SecurityProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Configuration
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain securityFilterChain()
+    {
+        return new SecurityFilterChain() {
+            @Override
+            public boolean matches(HttpServletRequest request) {
+                return true;
+            }
+
+            @Override
+            public List<Filter> getFilters() {
+                return List.of(new SecContextHolderFilter(),
+                        new UserNamePasswordFilter(),
+                        new LoginPageFilter(),
+                        new SecAuthorizationFilter());
+            }
+        };
+    }
+
+
 //    private final RateLimitFilter rateLimitFilter = new RateLimitFilter();
+//
 //    @Bean
 //    public SecurityFilterChain defaultFilterChain() {
 //        return new SecurityFilterChain() {
@@ -49,10 +75,10 @@
 //                                        FilterChain filterChain) throws ServletException, IOException {
 //
 //            String apiKey = request.getHeader("X-API-KEYPRO");
-////            if (apiKey == null) {
-////                filterChain.doFilter(request,response);
-////                return;
-////            }
+//            if (apiKey == null) {
+//                filterChain.doFilter(request,response);
+//                return;
+//            }
 //             if(API_KEY.equals(apiKey))
 //             {
 //            filterChain.doFilter(request,response);
@@ -98,6 +124,9 @@
 //                                        HttpServletResponse response,
 //                                        FilterChain filterChain) throws ServletException, IOException {
 //
+//
+//
+//
 //            String clientIp = request.getRemoteAddr();
 //
 //          int count=  requestCounter.merge(clientIp,1,Integer::sum);
@@ -128,5 +157,6 @@
 //
 //        }
 //    }
-//}
-//
+
+}
+

@@ -13,4 +13,9 @@ public class EmployeeController {
     {
         return ResponseEntity.ok("i am employee contelller ");
     }
+    @GetMapping("/")
+    public ResponseEntity<?> home()
+    {
+        return ResponseEntity.ok(" i am home page ");
+    }
 }
