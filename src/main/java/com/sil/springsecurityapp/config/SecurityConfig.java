@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -37,7 +38,9 @@ public class SecurityConfig {
 
             @Override
             public List<Filter> getFilters() {
-                return List.of(new SecContextHolderFilter(),
+                return List.of(
+                        new DisableEncodeUrlFilter(),
+                        new SecContextHolderFilter(),
                         new UserNamePasswordFilter(),
                         new LoginPageFilter(),
                         new SecAuthorizationFilter());

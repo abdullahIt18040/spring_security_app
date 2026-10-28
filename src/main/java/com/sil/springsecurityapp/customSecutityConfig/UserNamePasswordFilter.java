@@ -21,10 +21,11 @@ public class UserNamePasswordFilter extends OncePerRequestFilter {
    private AntPathMatcher matcher = new AntPathMatcher();
    private AuthManager authManager = new AuthManager();
    private final SessionBaseAuthentication  sessionBaseAuthentication= new SessionBaseAuthentication();
- private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+   private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     //AuthenticationManager
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
      String path = request.getRequestURI();
      String method = request.getMethod();
      if (!(matcher.match("/login", path) && HttpMethod.POST.name().equals(method)))
@@ -32,10 +33,8 @@ public class UserNamePasswordFilter extends OncePerRequestFilter {
       filterChain.doFilter(request,response);
         return;
      }
-
      String username= request.getParameter("username");
      String password =request.getParameter("password");
-
        try {
         var auth= authManager.authenticated(new Auth(username,password,
                    null,false));
@@ -55,7 +54,7 @@ public class UserNamePasswordFilter extends OncePerRequestFilter {
 
     private void successfullyAuthenticate(HttpServletRequest request,
                                           HttpServletResponse response) throws IOException {
-        redirectStrategy.sendRedirect(request,response,"/");
+        redirectStrategy.sendRedirect(request,response,"/api/");
 
 
 

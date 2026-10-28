@@ -9,7 +9,9 @@ public class SessionBaseAuthentication {
                                HttpServletResponse response)
     {
     var sesion = request.getSession();
-    sesion.setAttribute("SPRING-SECURITY-USER",auth);
+    SecContext context = new SecContext();
+    context.setAuth(auth);
+    sesion.setAttribute("SPRING-SECURITY-USER",context); // session manage tomcate itself
 //        SecurityContextHolder
 
     }
